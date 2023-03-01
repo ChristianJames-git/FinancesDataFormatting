@@ -1,3 +1,6 @@
+# input file with each description on its own line
+# replaces every space with an underscore
+
 filename = "desc.txt"
 
 with open(filename, "r") as file:

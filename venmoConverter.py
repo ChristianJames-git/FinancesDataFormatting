@@ -1,3 +1,5 @@
+# WIP
+
 from datetime import date
 
 with open('venmos.txt', 'r') as f:

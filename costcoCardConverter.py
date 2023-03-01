@@ -1,3 +1,10 @@
+# input in format below with a space between lines
+#   Feb 28, 2023
+#   CHIPOTLE 2202 SAN DIEGO US
+#   $17.67
+# output in format
+#   Feb/28/2023 CHIPOTLE -$17.67
+
 with open('costco.txt', 'r') as f:
     lines = f.readlines()
 
