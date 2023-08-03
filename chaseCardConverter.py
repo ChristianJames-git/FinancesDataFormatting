@@ -13,7 +13,7 @@ for line in reversed(lines):
     # Extract location and category from the combined string
     location, category = location_and_category.split("\n")
     location = location.title()  # Capitalize the first letter of each word
-    location = re.sub(r'\s*\d.*', '', location)
+    location = re.sub(r'\s+\d.*', '', location)
     location = location.replace("    Pay Over Time", "")
 
     # Convert the date to the desired format
