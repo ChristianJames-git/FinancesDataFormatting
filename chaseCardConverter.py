@@ -1,8 +1,9 @@
 import re
 
-with open('united.txt', 'r') as f:
+with open('chase.txt', 'r') as f:
     lines = f.readlines()
-lines = [lines[i] + lines[i + 1] for i in range(0, len(lines), 2)]
+card = lines[0][0:4]
+lines = [lines[i] + lines[i + 1] for i in range(1, len(lines), 2)]
 
 # Process each transaction and print the desired output
 for line in reversed(lines):
@@ -20,18 +21,29 @@ for line in reversed(lines):
 
     formatted_date = datetime.strptime(date, "%b %d, %Y").strftime("%m/%d/%Y")
 
-    card = "0500"
-
     # Remove any leading/trailing whitespaces from price and replace the comma
     price = price.strip().replace(",", "")
 
     # Hand Card Payments
     if "Payment Thank You" in location:
-        location = "Pay United Credit"
+        match card:
+            case "0500":
+                cardName = "United"
+            case "1815":
+                cardName = "Amazon"
+            case "3741":
+                cardName = "Marriott"
+            case _:
+                cardName = "ERROR"
+
+        location = f"Pay {cardName} Credit"
         price = price[1:]
         payCardOutput = f"{formatted_date}@{location}@{card}@{price}"
         card = "8887"
         print(payCardOutput)
+    else:
+        if card == "1815":
+            location = "Amazon"
 
     # Format the output string
     output_string = f"{formatted_date}@{location}@{card}@-{price}"
