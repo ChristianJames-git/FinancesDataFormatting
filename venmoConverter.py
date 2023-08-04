@@ -6,48 +6,68 @@
 # Output:
 #   2023-02-28 Eugenio Casta Heater -$10.00
 
-from datetime import date as datet
-from datetime import timedelta
+from datetime import datetime, timedelta
+import re
 
 with open('venmos.txt', 'r') as f:
     lines = f.readlines()
+combined_lines = []
+i = 0
+while i < len(lines):
+    if "Standard Transfer Initiated" in lines[i]:
+        combined_string = lines[i] + lines[i + 1] + lines[i + 2] + lines[i + 3] + lines[i + 4]
+        i += 5
+    else:
+        combined_string = lines[i] + lines[i + 1] + lines[i + 2] + lines[i + 3]
+        i += 4
+    combined_lines.append(combined_string)
 
-count = 1
-transfer = ""
-today = datet.today()
-date = datet.today()
-desc = ""
-amount = ""
-payments = []
-for line in lines:
-    line = line.strip("\n")
-    match count:
-        case 1:
-            splitLine = line.split(" ")
-            if line[0] == 'Y':  # case for me paying or chargine
-                desc = f"{splitLine[2]} {splitLine[3]}"
-            elif line[0:12] == "Bank Transfer": #  case for bank transfer
-                desc = f"Transfer Venmo"
-            else:  # case for me being paid or charged
-                desc = f"{splitLine[0]} {splitLine[1]}"
-        case 2:
-            if line[len(line)-1] == 'h':
-                date = today
-            elif line[len(line)-1] == 'd':
-                date = today - timedelta(days=int(line[0:len(line)-1]))  # subtract days
-        case 3:
-            if line[0:18] == "Estimated arrival:":
-                transfer = "-"
-                continue
-            desc = f"{desc} {line}"
-        case 4:
-            line = line.replace(" ", "")
-            amount = f"{transfer}{line}"
-            transfer = ""
-            payments.append(f"{date} {desc} {amount}")
-            count = 0
-    count += 1
+for line in reversed(combined_lines):
+    line = re.sub(r'\n$', '', line)
+    line = line.split("\n")
+    if len(line) == 4:
+        desc, date_change, desc2, amount = line
+        you_paid_pattern = re.compile(r'You paid (.+)')
+        paid_you_pattern = re.compile(r'(.+) paid you')
+        you_charged_pattern = re.compile(r'You charged (.+)')
+        charged_you_pattern = re.compile(r'(.+) charged you')
 
-payments.reverse()
-for payment in payments:                                                    
-    print(payment)
+        # Try to find matches for both patterns
+        you_paid_match = you_paid_pattern.search(desc)
+        paid_you_match = paid_you_pattern.search(desc)
+        you_charged_match = you_charged_pattern.search(desc)
+        charged_you_match = charged_you_pattern.search(desc)
+
+        if you_paid_match:
+            description = you_paid_match.group(1)
+            desc = you_paid_pattern.sub(description, desc)
+        elif paid_you_match:
+            description = paid_you_match.group(1)
+            desc = paid_you_pattern.sub(description, desc)
+        elif you_charged_match:
+            description = you_charged_match.group(1)
+            desc = you_charged_pattern.sub(description, desc)
+        elif charged_you_match:
+            description = charged_you_match.group(1)
+            desc = charged_you_pattern.sub(description, desc)
+        desc = f"{desc.strip()} {desc2}"
+    else:
+        ignore, date_change, ignore2, ignore3, amount = line
+        desc = "Venmo Transfer"
+
+    current_date = datetime.now().date()
+    date_change = re.sub(r'\D', '', date_change)
+    date = current_date - timedelta(days=int(date_change))
+    formatted_date = datetime.strptime(str(date), "%Y-%m-%d").strftime("%m/%d/%Y")
+
+    amount = re.sub(' ', '', amount)
+
+    if len(line) == 5:
+        amount = f"-{amount}"
+
+    card = "venmo"
+
+    output_string = f"{formatted_date}@{desc}@{card}@{amount}"
+
+    # Print the result
+    print(output_string)

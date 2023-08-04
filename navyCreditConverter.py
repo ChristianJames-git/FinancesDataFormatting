@@ -23,6 +23,7 @@ for line in reversed(lines):
         location = "Amazon Prime"
     else:
         location = location.split(" ")[0]
+        location = location.title()
 
     # Format the output string
     output_string = f"{date}@{location}@{card}@{amount}"
