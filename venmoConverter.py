@@ -66,6 +66,7 @@ for line in reversed(combined_lines):
         formatted_date = parsed_date.replace(year=current_year).strftime("%m/%d/%Y")
 
     amount = re.sub(' ', '', amount)
+    amount = re.sub('\+', '', amount)
 
     if len(line) == 5:
         amount = f"-{amount}"
