@@ -55,10 +55,15 @@ for line in reversed(combined_lines):
         ignore, date_change, ignore2, ignore3, amount = line
         desc = "Venmo Transfer"
 
-    current_date = datetime.now().date()
-    date_change = re.sub(r'\D', '', date_change)
-    date = current_date - timedelta(days=int(date_change))
-    formatted_date = datetime.strptime(str(date), "%Y-%m-%d").strftime("%m/%d/%Y")
+    if "d" in date_change:
+        current_date = datetime.now().date()
+        date_change = re.sub(r'\D', '', date_change)
+        date = current_date - timedelta(days=int(date_change))
+        formatted_date = datetime.strptime(str(date), "%Y-%m-%d").strftime("%m/%d/%Y")
+    else:
+        current_year = datetime.now().year
+        parsed_date = datetime.strptime(date_change, "%b %d")
+        formatted_date = parsed_date.replace(year=current_year).strftime("%m/%d/%Y")
 
     amount = re.sub(' ', '', amount)
 
