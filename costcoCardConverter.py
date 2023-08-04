@@ -5,35 +5,34 @@
 # output in format
 #   Feb/28/2023 CHIPOTLE -$17.67
 
+from datetime import datetime
+import re
+
 with open('costco.txt', 'r') as f:
     lines = f.readlines()
+lines = [lines[i] + lines[i + 1] + lines[i + 2] for i in range(0, len(lines), 4)]
 
-count = 1
-month = ""
-day = ""
-year = ""
-desc = ""
-amount = ""
-payments = []
-for line in lines:
-    if line.strip() == "":
-        count = 1
-        continue
-    if count == 1:
-        month, day, year = line.split(" ")
-        day = day.replace(',', "")
-        year = year.strip()
-        count = 2
-        continue
-    if count == 2:
-        desc = line.split(" ")
-        count = 3
-        continue
-    if count == 3:
-        amount = "-" + line.strip()[1:]
-        payments.append(f"{month}/{day}/{year} {desc[0]} {amount}")
-        continue
-payments.reverse()
-for payment in payments:
-    print(payment)
+for line in reversed(lines):
+    line = line.strip().replace("\n", "")
+    date, location, price = line.split("\t")
+    formatted_date = datetime.strptime(date, "%b %d, %Y").strftime("%m/%d/%Y")
 
+    location = location.title()
+    location = re.sub(r'\s+#*\d.*', '', location)
+
+    card = "0287"
+
+    price = price.strip().replace(",", "")
+
+    if "Autopay" in location:
+        location = f"Pay Costco Credit"
+        price = price[1:]
+        payCardOutput = f"{formatted_date}@{location}@{card}@{price}"
+        card = "8887"
+        print(payCardOutput)
+
+    # Format the output string
+    output_string = f"{formatted_date}@{location}@{card}@-{price}"
+
+    # Print the result
+    print(output_string)

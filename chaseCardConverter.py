@@ -18,7 +18,6 @@ for line in reversed(lines):
 
     # Convert the date to the desired format
     from datetime import datetime
-
     formatted_date = datetime.strptime(date, "%b %d, %Y").strftime("%m/%d/%Y")
 
     # Remove any leading/trailing whitespaces from price and replace the comma
