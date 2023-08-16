@@ -14,6 +14,7 @@ for line in reversed(lines):
     line = line.strip().replace("\n", "")
     date, location, blank, group, amount, total = line.split("\t")
 
+    location = location.title()
     location = re.sub(r'\S+\s\S+\s-\s', '', location)
     location = re.sub(r'Visa Direct.*', '', location)
     if "AUSGAR" in location:

@@ -8,6 +8,8 @@ lines = [lines[i] + lines[i + 1] for i in range(1, len(lines), 2)]
 # Process each transaction and print the desired output
 for line in reversed(lines):
 
+    line = line.strip("\n")
+    line = line.strip("\t")
     date, location_and_category, price = line.split("\t")
 
     # Extract location and category from the combined string
@@ -22,6 +24,10 @@ for line in reversed(lines):
 
     # Remove any leading/trailing whitespaces from price and replace the comma
     price = price.strip().replace(",", "")
+
+    if "-" in price and card == "3741":
+        print(f"{formatted_date}@{location}@{card}@{price[1:]}")
+        continue
 
     # Hand Card Payments
     if "Payment Thank You" in location:
