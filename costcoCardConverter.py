@@ -10,11 +10,11 @@ import re
 
 with open('costco.txt', 'r') as f:
     lines = f.readlines()
-lines = [lines[i] + lines[i + 1] + lines[i + 2] for i in range(0, len(lines), 4)]
+lines = [lines[i] + lines[i + 1] + lines[i + 2] for i in range(0, len(lines), 5)]
 
 for line in reversed(lines):
-    line = line.strip().replace("\n", "")
-    date, location, price = line.split("\t")
+    line = line.strip("\n")
+    location, price, date = line.split("\n")
     formatted_date = datetime.strptime(date, "%b %d, %Y").strftime("%m/%d/%Y")
 
     location = location.title()
