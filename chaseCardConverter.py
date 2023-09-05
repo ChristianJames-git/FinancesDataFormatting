@@ -8,6 +8,7 @@ lines = [lines[i] + lines[i + 1] for i in range(1, len(lines), 2)]
 # Process each transaction and print the desired output
 for line in reversed(lines):
 
+    finalcard = card
     line = line.strip("\n")
     line = line.strip("\t")
     date, location_and_category, price = line.split("\t")
@@ -26,7 +27,7 @@ for line in reversed(lines):
     price = price.strip().replace(",", "")
 
     if "-" in price and card == "3741":
-        print(f"{formatted_date}@{location}@{card}@{price[1:]}")
+        print(f"{formatted_date}@{location}@{finalcard}@{price[1:]}")
         continue
 
     # Hand Card Payments
@@ -43,15 +44,15 @@ for line in reversed(lines):
 
         location = f"Pay {cardName} Credit"
         price = price[1:]
-        payCardOutput = f"{formatted_date}@{location}@{card}@{price}"
-        card = "8887"
+        payCardOutput = f"{formatted_date}@{location}@{finalcard}@{price}"
+        finalcard = "8887"
         print(payCardOutput)
     else:
         if card == "1815":
             location = "Amazon"
 
     # Format the output string
-    output_string = f"{formatted_date}@{location}@{card}@-{price}"
+    output_string = f"{formatted_date}@{location}@{finalcard}@-{price}"
 
     # Print the result
     print(output_string)
