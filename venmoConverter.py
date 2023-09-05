@@ -55,6 +55,7 @@ for line in reversed(combined_lines):
         ignore, date_change, ignore2, ignore3, amount = line
         desc = "Venmo Transfer"
 
+    date_change = re.sub(r'\d+[smh]', "0d", date_change)
     if "d" in date_change:
         current_date = datetime.now().date()
         date_change = re.sub(r'\D', '', date_change)
