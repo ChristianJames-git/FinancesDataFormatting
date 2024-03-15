@@ -1,3 +1,6 @@
+# TODO schwab
+# TODO chase
+# TODO navyfed
 from venmoConverter import venmo_to_sheets as venmo
 from citiConverter import costco_to_sheets as costco
 # from schwabConverter import checking_to_sheets as schwab_checking, rent_to_sheets as rent 
