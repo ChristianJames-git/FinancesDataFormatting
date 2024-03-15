@@ -1,3 +1,4 @@
+# TODO Dynamically determine which external accounts money is sent to
 from datetime import datetime, timedelta
 import re
 
