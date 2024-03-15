@@ -10,6 +10,8 @@ for line in reversed(lines):
         continue
     if "Credit Card" in line:
         continue
+    if "VENMO CASHOUT" in line:
+        continue
 
     line = line.strip().replace("\n", "")
     date, location, blank, group, amount, total = line.split("\t")

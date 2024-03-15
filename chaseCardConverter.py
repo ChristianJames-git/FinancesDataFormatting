@@ -31,7 +31,7 @@ for line in reversed(lines):
         continue
 
     # Hand Card Payments
-    if "Payment Thank You" in location:
+    if "Payment" in location:
         match card:
             case "0500":
                 cardName = "United"
@@ -50,6 +50,9 @@ for line in reversed(lines):
     else:
         if card == "1815":
             location = "Amazon"
+        if "-" in price:
+            print(f"{formatted_date}@{location}@{finalcard}@{price.strip('-')}")
+            continue
 
     # Format the output string
     output_string = f"{formatted_date}@{location}@{finalcard}@-{price}"

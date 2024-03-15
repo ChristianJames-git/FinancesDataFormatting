@@ -14,18 +14,18 @@ with open('venmos.txt', 'r') as f:
 combined_lines = []
 i = 0
 while i < len(lines):
-    if "Standard Transfer Initiated" in lines[i]:
-        combined_string = lines[i] + lines[i + 1] + lines[i + 2] + lines[i + 3] + lines[i + 4]
-        i += 5
-    else:
-        combined_string = lines[i] + lines[i + 1] + lines[i + 2] + lines[i + 3]
-        i += 4
+    # if "Standard Transfer Initiated" in lines[i]:
+    #     combined_string = lines[i] + lines[i + 1] + lines[i + 2] + lines[i + 3] + lines[i + 4]
+    #     i += 5
+    # else:
+    combined_string = lines[i] + lines[i + 1] + lines[i + 2] + lines[i + 3]
+    i += 4
     combined_lines.append(combined_string)
 
 for line in reversed(combined_lines):
     line = re.sub(r'\n$', '', line)
     line = line.split("\n")
-    if len(line) == 4:
+    if "Standard Transfer Initiated" not in line[0]:
         desc, date_change, desc2, amount = line
         you_paid_pattern = re.compile(r'You paid (.+)')
         paid_you_pattern = re.compile(r'(.+) paid you')
@@ -52,7 +52,7 @@ for line in reversed(combined_lines):
             desc = charged_you_pattern.sub(description, desc)
         desc = f"{desc.strip()} {desc2}"
     else:
-        ignore, date_change, ignore2, ignore3, amount = line
+        ignore, date_change, ignore2, amount = line
         desc = "Venmo Transfer"
 
     date_change = re.sub(r'\d+[smh]', "0d", date_change)
@@ -69,7 +69,8 @@ for line in reversed(combined_lines):
     amount = re.sub(' ', '', amount)
     amount = re.sub('\+', '', amount)
 
-    if len(line) == 5:
+    if desc == "Venmo Transfer":
+        print(f"{formatted_date}@{desc}@8887@{amount}")
         amount = f"-{amount}"
 
     card = "venmo"
