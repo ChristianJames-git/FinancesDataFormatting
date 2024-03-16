@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+from config import ConfigData
 
 def costco_to_sheets(lines):
     """
@@ -25,19 +26,17 @@ def costco_to_sheets(lines):
         location = re.sub(r'\s+#*\d.*', '', location)
         location = location.rstrip(" \t")
 
-        card = "0287"
-
         price = price.strip().replace(",", "")
+        price = float(re.sub(r'[$-]', '', price)) * -1
 
         if "Autopay" in location:
             location = f"Pay Costco Credit"
-            price = price[1:]
-            payCardOutput = f"{formatted_date}@{location}@{card}@{price}"
-            card = "8887"
+            payCardOutput = f"{formatted_date}@{location}@{ConfigData.MAIN_ACCOUNT}@{price}"
+            price *= -1
             print(payCardOutput)
 
         # Format the output string
-        output_string = f"{formatted_date}@{location}@{card}@-{price}"
+        output_string = f"{formatted_date}@{location}@{ConfigData.COSTCO_CARD}@{price}"
 
         # Print the result
         print(output_string)

@@ -1,14 +1,75 @@
 import re
+from config import ConfigData
 
-with open('chase.txt', 'r') as f:
-    lines = f.readlines()
-card = lines[0][0:4]
-lines = [lines[i] + lines[i + 1] for i in range(1, len(lines), 2)]
+def amazon_to_sheets(lines):
+    """
+    Input:
+        Mar 9, 2024	AMZN Mktp US*RN0OC62B2
+        Shopping , opens menu	$13.55	
+    Output:
+        03/09/2024@Amazon@1815@-13.55
+    """
+    lines = [lines[i] + lines[i + 1] for i in range(0, len(lines), 2)]
+    # Process each transaction and print the desired output
+    for line in reversed(lines):
+        formatted_date, location, price = _chase_to_sheets(line)
+        if "Payment" in location:
+            location = "Pay Amazon Credit"
+            payCardOutput = f"{formatted_date}@{location}@{ConfigData.MAIN_ACCOUNT}@-{price}"
+            print(payCardOutput)
+        else:
+            location = "Amazon"
+        # Format the output string
+        output_string = f"{formatted_date}@{location}@{ConfigData.AMAZON_CARD}@{price}"
+        # Print the result
+        print(output_string)
 
-# Process each transaction and print the desired output
-for line in reversed(lines):
 
-    finalcard = card
+def united_to_sheets(lines):
+    """
+    Input:
+        Feb 22, 2024	CHIPOTLE 1805
+        Food & drink , opens menu	$11.04
+    Output:
+        02/22/2024@Chipotle@0500@-11.04
+    """
+    lines = [lines[i] + lines[i + 1] for i in range(0, len(lines), 2)]
+    # Process each transaction and print the desired output
+    for line in reversed(lines):
+        formatted_date, location, price = _chase_to_sheets(line)
+        if "Payment" in location:
+            location = "Pay United Credit"
+            payCardOutput = f"{formatted_date}@{location}@{ConfigData.MAIN_ACCOUNT}@-{price}"
+            print(payCardOutput)
+        # Format the output string
+        output_string = f"{formatted_date}@{location}@{ConfigData.UNITED_CARD}@{price}"
+        # Print the result
+        print(output_string)
+
+
+def marriott_to_sheets(lines):
+    """
+    Input:
+        Aug 5, 2023	THE HOME DEPOT 1848
+        Home , opens menu	-$64.93		
+    Output:
+        08/05/2023@The Home Depot@3741@64.93
+    """
+    lines = [lines[i] + lines[i + 1] for i in range(0, len(lines), 2)]
+    # Process each transaction and print the desired output
+    for line in reversed(lines):
+        formatted_date, location, price = _chase_to_sheets(line)
+        if "Payment" in location:
+            location = "Pay Marriott Credit"
+            payCardOutput = f"{formatted_date}@{location}@{ConfigData.MAIN_ACCOUNT}@-{price}"
+            print(payCardOutput)
+        # Format the output string
+        output_string = f"{formatted_date}@{location}@{ConfigData.MARRIOTT_CARD}@{price}"
+        # Print the result
+        print(output_string)
+
+
+def _chase_to_sheets(line):
     line = line.strip("\n")
     line = line.strip("\t")
     date, location_and_category, price = line.split("\t")
@@ -24,38 +85,7 @@ for line in reversed(lines):
     formatted_date = datetime.strptime(date, "%b %d, %Y").strftime("%m/%d/%Y")
 
     # Remove any leading/trailing whitespaces from price and replace the comma
-    price = price.strip().replace(",", "")
+    price = float(price.strip().replace(",", "").replace("$", "")) * -1
+    # price = float(re.sub(r'[$]', '', price)) * -1
 
-    if "-" in price and card == "3741":
-        print(f"{formatted_date}@{location}@{finalcard}@{price[1:]}")
-        continue
-
-    # Hand Card Payments
-    if "Payment" in location:
-        match card:
-            case "0500":
-                cardName = "United"
-            case "1815":
-                cardName = "Amazon"
-            case "3741":
-                cardName = "Marriott"
-            case _:
-                cardName = "ERROR"
-
-        location = f"Pay {cardName} Credit"
-        price = price[1:]
-        payCardOutput = f"{formatted_date}@{location}@{finalcard}@{price}"
-        finalcard = "8887"
-        print(payCardOutput)
-    else:
-        if card == "1815":
-            location = "Amazon"
-        if "-" in price:
-            print(f"{formatted_date}@{location}@{finalcard}@{price.strip('-')}")
-            continue
-
-    # Format the output string
-    output_string = f"{formatted_date}@{location}@{finalcard}@-{price}"
-
-    # Print the result
-    print(output_string)
+    return formatted_date, location, price

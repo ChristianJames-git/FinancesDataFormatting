@@ -1,6 +1,7 @@
 # TODO Dynamically determine which external accounts money is sent to
 from datetime import datetime, timedelta
 import re
+from config import ConfigData
 
 def venmo_to_sheets(lines):
     """
@@ -67,7 +68,7 @@ def venmo_to_sheets(lines):
         amount = re.sub('\+', '', amount)
 
         if desc == "Venmo Transfer":
-            print(f"{formatted_date}@{desc}@8887@{amount}")
+            print(f"{formatted_date}@{desc}@{ConfigData.MAIN_ACCOUNT}@{amount}")
             amount = f"-{amount}"
 
         card = "venmo"
