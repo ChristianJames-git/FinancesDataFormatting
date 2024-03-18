@@ -1,10 +1,4 @@
-import re
-from config import ConfigData
-from datetime import datetime
-
-def schwab_to_sheets(lines, acc):
-    transactionFound = 0
-    transactions_per_date = []
+def schwab_to_sheets(output, lines, acc):
     converts_set = set(_schwab_conversions.keys())
 
     for line in reversed(lines):
@@ -15,10 +9,7 @@ def schwab_to_sheets(lines, acc):
         key = next((key for key in converts_set if key in desc), None)
         if key:
             desc = _schwab_conversions[key](desc)
-        _print_transactions(acc, date, desc, price)
-
-def _print_transactions(id, date, desc, price):
-    print(f"{date}@{desc}@{id}@{price}")
+        output.write(f"{date}@{desc}@{acc}@{price}\n")
 
 
 _schwab_conversions = {

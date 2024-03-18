@@ -1,8 +1,7 @@
 import re
-from config import ConfigData
 from datetime import datetime
 
-def navy_to_sheets(lines, acc):
+def navy_to_sheets(output, lines, acc):
     transactionFound = 0
     transactions_per_date = []
     converts_set = set(_navy_conversions.keys())
@@ -12,7 +11,7 @@ def navy_to_sheets(lines, acc):
             if "Transaction Amount" in line:
                 transactionFound = 3
             elif bool(re.search(r',\s20\d{2}\n', line)):
-                _print_transactions(acc, transactions_per_date, line.strip())
+                _print_transactions(output, acc, transactions_per_date, line.strip())
                 transactions_per_date.clear()
                 continue
             else:
@@ -31,12 +30,12 @@ def navy_to_sheets(lines, acc):
         continue
 
 
-def _print_transactions(id, transaction_list, date):
+def _print_transactions(output, id, transaction_list, date):
     formatted_date = datetime.strptime(date, "%B %d, %Y").strftime("%m/%d/%Y")
     for i in range(0, len(transaction_list), 2):
         description = transaction_list[i+1]
         price = transaction_list[i]
-        print(f"{formatted_date}@{description}@{id}@{price}")
+        output.write(f"{formatted_date}@{description}@{id}@{price}\n")
 
 
 _navy_conversions = {

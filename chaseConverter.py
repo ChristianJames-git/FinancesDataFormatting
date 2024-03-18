@@ -1,7 +1,7 @@
 import re
 from config import ConfigData
 
-def amazon_to_sheets(lines):
+def amazon_to_sheets(output, lines):
     """
     Input:
         Mar 9, 2024	AMZN Mktp US*RN0OC62B2
@@ -17,10 +17,10 @@ def amazon_to_sheets(lines):
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.AMAZON_CARD}@{price}"
         # Print the result
-        print(output_string)
+        output.write(f"{output_string}\n")
 
 
-def united_to_sheets(lines):
+def united_to_sheets(output, lines):
     """
     Input:
         Feb 22, 2024	CHIPOTLE 1805
@@ -35,10 +35,10 @@ def united_to_sheets(lines):
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.UNITED_CARD}@{price}"
         # Print the result
-        print(output_string)
+        output.write(f"{output_string}\n")
 
 
-def marriott_to_sheets(lines):
+def marriott_to_sheets(output, lines):
     """
     Input:
         Aug 5, 2023	THE HOME DEPOT 1848
@@ -53,7 +53,7 @@ def marriott_to_sheets(lines):
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.MARRIOTT_CARD}@{price}"
         # Print the result
-        print(output_string)
+        output.write(f"{output_string}\n")
 
 
 def _chase_to_sheets(line):

@@ -2,7 +2,7 @@ from datetime import datetime
 import re
 from config import ConfigData
 
-def costco_to_sheets(lines):
+def costco_to_sheets(output, lines):
     """
     Input:
         CHICK-FIL-A #02013 619-562-0774 CA
@@ -29,14 +29,8 @@ def costco_to_sheets(lines):
         price = price.strip().replace(",", "")
         price = float(re.sub(r'[$-]', '', price)) * -1
 
-        if "Autopay" in location:
-            location = f"Pay Costco Credit"
-            payCardOutput = f"{formatted_date}@{location}@{ConfigData.MAIN_ACCOUNT}@{price}"
-            price *= -1
-            print(payCardOutput)
-
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.COSTCO_CARD}@{price}"
 
         # Print the result
-        print(output_string)
+        output.write(f"{output_string}\n")
