@@ -13,12 +13,7 @@ def amazon_to_sheets(lines):
     # Process each transaction and print the desired output
     for line in reversed(lines):
         formatted_date, location, price = _chase_to_sheets(line)
-        if "Payment" in location:
-            location = "Pay Amazon Credit"
-            payCardOutput = f"{formatted_date}@{location}@{ConfigData.MAIN_ACCOUNT}@-{price}"
-            print(payCardOutput)
-        else:
-            location = "Amazon"
+        location = "Amazon"
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.AMAZON_CARD}@{price}"
         # Print the result
@@ -37,10 +32,6 @@ def united_to_sheets(lines):
     # Process each transaction and print the desired output
     for line in reversed(lines):
         formatted_date, location, price = _chase_to_sheets(line)
-        if "Payment" in location:
-            location = "Pay United Credit"
-            payCardOutput = f"{formatted_date}@{location}@{ConfigData.MAIN_ACCOUNT}@-{price}"
-            print(payCardOutput)
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.UNITED_CARD}@{price}"
         # Print the result
@@ -59,10 +50,6 @@ def marriott_to_sheets(lines):
     # Process each transaction and print the desired output
     for line in reversed(lines):
         formatted_date, location, price = _chase_to_sheets(line)
-        if "Payment" in location:
-            location = "Pay Marriott Credit"
-            payCardOutput = f"{formatted_date}@{location}@{ConfigData.MAIN_ACCOUNT}@-{price}"
-            print(payCardOutput)
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.MARRIOTT_CARD}@{price}"
         # Print the result
@@ -86,6 +73,5 @@ def _chase_to_sheets(line):
 
     # Remove any leading/trailing whitespaces from price and replace the comma
     price = float(price.strip().replace(",", "").replace("$", "")) * -1
-    # price = float(re.sub(r'[$]', '', price)) * -1
 
     return formatted_date, location, price

@@ -1,7 +1,5 @@
-# TODO Dynamically determine which external accounts money is sent to
 from datetime import datetime, timedelta
 import re
-from config import ConfigData
 
 def venmo_to_sheets(lines):
     """
@@ -14,11 +12,16 @@ def venmo_to_sheets(lines):
         03/13/2024@Eugenio Casta Heater@-$10.00
     """
     combined_lines = []
-    i = 0
-    while i < len(lines):
-        combined_string = lines[i] + lines[i + 1] + lines[i + 2] + lines[i + 3]
-        i += 4
-        combined_lines.append(combined_string)
+    transaction = 0
+    newTransaction = True
+    for line in lines:
+        if newTransaction:
+            combined_lines.append("")
+            newTransaction = False
+        combined_lines[transaction] += line
+        if "$" in line:
+            newTransaction = True
+            transaction += 1
 
     for line in reversed(combined_lines):
         line = re.sub(r'\n$', '', line)
@@ -50,7 +53,7 @@ def venmo_to_sheets(lines):
                 desc = charged_you_pattern.sub(description, desc)
             desc = f"{desc.strip()} {desc2}"
         else:
-            ignore, date_change, ignore2, amount = line
+            ignore, date_change, ignore2, ignore3, amount = line
             desc = "Venmo Transfer"
 
         date_change = re.sub(r'\d+[smh]', "0d", date_change)
@@ -60,16 +63,13 @@ def venmo_to_sheets(lines):
             date = current_date - timedelta(days=int(date_change))
             formatted_date = datetime.strptime(str(date), "%Y-%m-%d").strftime("%m/%d/%Y")
         else:
-            current_year = datetime.now().year
-            parsed_date = datetime.strptime(date_change, "%b %d")
-            formatted_date = parsed_date.replace(year=current_year).strftime("%m/%d/%Y")
+            if "," not in date_change:
+                date_change += ", " + str(datetime.now().year)
+            parsed_date = datetime.strptime(date_change, "%b %d, %Y")
+            formatted_date = parsed_date.strftime("%m/%d/%Y")
 
         amount = re.sub(' ', '', amount)
         amount = re.sub('\+', '', amount)
-
-        if desc == "Venmo Transfer":
-            print(f"{formatted_date}@{desc}@{ConfigData.MAIN_ACCOUNT}@{amount}")
-            amount = f"-{amount}"
 
         card = "venmo"
 
