@@ -1,12 +1,11 @@
-# TODO schwab
 from config import ConfigData
 from venmoConverter import venmo_to_sheets as venmo
 from citiConverter import costco_to_sheets as costco
-# from schwabConverter import checking_to_sheets as schwab_checking, rent_to_sheets as rent 
+from schwabConverter import schwab_to_sheets as schwab_checking
 from chaseConverter import amazon_to_sheets as amazon, united_to_sheets as united, marriott_to_sheets as marriott
 from navyConverter import navy_to_sheets as navy_banking
 
-with open('venmo_charges.txt', 'r') as f:
+with open('schwab_rent_charges.txt', 'r') as f:
     lines = f.readlines()
 acc = lines[0][0:4]
 if acc == "venm":
@@ -27,7 +26,7 @@ elif acc == ConfigData.UNITED_CARD:
     united(lines[1:])
 elif acc == ConfigData.MARRIOTT_CARD:
     marriott(lines[1:])
-# elif acc == ConfigData.SCHWAB_CHECKING:
-#     schwab_checking(lines[1:])
-# elif acc == ConfigData.SCHWAB_RENT:
-#     rent(lines[1:])
+elif acc == ConfigData.SCHWAB_CHECKING:
+    schwab_checking(lines[1:], acc)
+elif acc == ConfigData.SCHWAB_RENT:
+    schwab_checking(lines[1:], acc)
