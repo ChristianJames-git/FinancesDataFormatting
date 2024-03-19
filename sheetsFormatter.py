@@ -1,9 +1,9 @@
 from config import ConfigData
-from venmoConverter import venmo_to_sheets as venmo
-from citiConverter import costco_to_sheets as costco
-from schwabConverter import schwab_to_sheets as schwab_checking
-from chaseConverter import amazon_to_sheets as amazon, united_to_sheets as united, marriott_to_sheets as marriott
-from navyConverter import navy_to_sheets as navy_banking
+from Converters.venmoConverter import venmo_to_sheets as venmo
+from Converters.citiConverter import costco_to_sheets as costco
+from Converters.schwabConverter import schwab_to_sheets as schwab_checking
+from Converters.chaseConverter import amazon_to_sheets as amazon, united_to_sheets as united, marriott_to_sheets as marriott
+from Converters.navyConverter import navy_to_sheets as navy_banking
 
 
 def run(lines):
@@ -41,8 +41,8 @@ files = [
     "schwab_rent_charges.txt",
     "costco_charges.txt",
     "amazon_charges.txt",
-    # "united_charges.txt",
-    # "marriott_charges.txt",
+    "united_charges.txt",
+    "marriott_charges.txt",
     "venmo_charges.txt",
 ]
 
@@ -50,6 +50,6 @@ with open('charges.txt', 'w') as clear:
     pass
 with open('charges.txt', 'a') as output:
     for file in files:
-        with open(file, 'r') as f:
+        with open(f"files/{file}", 'r') as f:
             lines = f.readlines()
             run(lines)
