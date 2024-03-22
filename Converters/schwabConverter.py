@@ -1,4 +1,5 @@
-def schwab_to_sheets(output, lines, acc):
+def schwab_to_sheets(lines, acc):
+    sheets_lines = []
     converts_set = set(_schwab_conversions.keys())
 
     for line in reversed(lines):
@@ -9,7 +10,10 @@ def schwab_to_sheets(output, lines, acc):
         key = next((key for key in converts_set if key in desc), None)
         if key:
             desc = _schwab_conversions[key](desc)
-        output.write(f"{date}@{desc}@{acc}@{price}\n")
+        output_string = f"{date}@{desc}@{acc}@{price}"
+        # output.write(f"{date}@{desc}@{acc}@{price}\n")
+        sheets_lines.append(output_string)
+    return sheets_lines
 
 
 _schwab_conversions = {

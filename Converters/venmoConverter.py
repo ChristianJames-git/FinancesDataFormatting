@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import re
 
-def venmo_to_sheets(output, lines):
+def venmo_to_sheets(lines):
     """
     Input:
         You paid Eugenio Casta
@@ -11,6 +11,7 @@ def venmo_to_sheets(output, lines):
     Output:
         03/13/2024@Eugenio Casta Heater@-$10.00
     """
+    sheets_lines = []
     combined_lines = []
     transaction = 0
     newTransaction = True
@@ -76,7 +77,9 @@ def venmo_to_sheets(output, lines):
         output_string = f"{formatted_date}@{desc}@{card}@{amount}"
 
         # Print the result
-        output.write(f"{output_string}\n")
+        # output.write(f"{output_string}\n")
+        sheets_lines.append(output_string)
+    return sheets_lines
 
 def venmo_to_sql(lines):
     print("TODO")

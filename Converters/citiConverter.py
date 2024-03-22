@@ -2,7 +2,7 @@ from datetime import datetime
 import re
 from config import ConfigData
 
-def costco_to_sheets(output, lines):
+def costco_to_sheets(lines):
     """
     Input:
         CHICK-FIL-A #02013 619-562-0774 CA
@@ -13,6 +13,7 @@ def costco_to_sheets(output, lines):
     Output:
         02/21/2024@CHICK-FIL-A@-$12.10
     """
+    sheets_lines = []
     lines = [lines[i] for i in range(len(lines)) if "Eligible for Citi" not in lines[i]]
     lines = [lines[i] + lines[i + 1] + lines[i + 2] for i in range(0, len(lines), 5)]
 
@@ -33,4 +34,6 @@ def costco_to_sheets(output, lines):
         output_string = f"{formatted_date}@{location}@{ConfigData.COSTCO_CARD}@{price}"
 
         # Print the result
-        output.write(f"{output_string}\n")
+        # output.write(f"{output_string}\n")
+        sheets_lines.append(output_string)
+    return sheets_lines
