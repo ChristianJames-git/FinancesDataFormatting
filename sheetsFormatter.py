@@ -1,9 +1,9 @@
 from config import ConfigData
-from Converters.venmoConverter import venmo_to_sheets as venmo
-from Converters.citiConverter import costco_to_sheets as costco
-from Converters.schwabConverter import schwab_to_sheets as schwab_checking
-from Converters.chaseConverter import amazon_to_sheets as amazon, united_to_sheets as united, marriott_to_sheets as marriott
-from Converters.navyConverter import navy_to_sheets as navy_banking
+from SheetsConverters.venmoConverter import venmo_to_sheets as venmo
+from SheetsConverters.citiConverter import costco_to_sheets as costco
+from SheetsConverters.schwabConverter import schwab_to_sheets as schwab_checking
+from SheetsConverters.chaseConverter import amazon_to_sheets as amazon, united_to_sheets as united, marriott_to_sheets as marriott
+from SheetsConverters.navyConverter import navy_to_sheets as navy_banking
 
 
 def run(lines):
