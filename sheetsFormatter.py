@@ -1,35 +1,35 @@
 from config import ConfigData
-from SheetsConverters.venmoConverter import venmo_to_sheets as venmo
-from SheetsConverters.citiConverter import costco_to_sheets as costco
-from SheetsConverters.schwabConverter import schwab_to_sheets as schwab_checking
-from SheetsConverters.chaseConverter import amazon_to_sheets as amazon, united_to_sheets as united, marriott_to_sheets as marriott
-from SheetsConverters.navyConverter import navy_to_sheets as navy_banking
+from Converters.venmoConverter import venmo_to_sheets as venmo
+from Converters.citiConverter import costco_to_sheets as costco
+from Converters.schwabConverter import schwab_to_sheets as schwab_checking
+from Converters.chaseConverter import amazon_to_sheets as amazon, united_to_sheets as united, marriott_to_sheets as marriott
+from Converters.navyConverter import navy_to_sheets as navy_banking
 
 
 def run(lines):
     acc = lines[0][0:4]
     if acc == "venm":
-        venmo(output, lines[1:])
+        return venmo(lines[1:])
     elif acc == ConfigData.NAVY_CHECKING:
-        navy_banking(output, lines[1:], acc)
+        return navy_banking(lines[1:], acc)
     elif acc == ConfigData.NAVY_SAVINGS:
-        navy_banking(output, lines[1:], acc)
+        return navy_banking(lines[1:], acc)
     elif acc == ConfigData.NAVY_CREDIT:
-        navy_banking(output, lines[1:], acc)
+        return navy_banking(lines[1:], acc)
     elif acc == ConfigData.NAVY_CD:
-        navy_banking(output, lines[1:], acc)
+        return navy_banking(lines[1:], acc)
     elif acc == ConfigData.COSTCO_CARD:
-        costco(output, lines[1:])
+        return costco(lines[1:])
     elif acc == ConfigData.AMAZON_CARD:
-        amazon(output, lines[1:])
+        return amazon(lines[1:])
     elif acc == ConfigData.UNITED_CARD:
-        united(output, lines[1:])
+        return united(lines[1:])
     elif acc == ConfigData.MARRIOTT_CARD:
-        marriott(output, lines[1:])
+        return marriott(lines[1:])
     elif acc == ConfigData.SCHWAB_CHECKING:
-        schwab_checking(output, lines[1:], acc)
+        return schwab_checking(lines[1:], acc)
     elif acc == ConfigData.SCHWAB_RENT:
-        schwab_checking(output, lines[1:], acc)
+        return schwab_checking(lines[1:], acc)
 
 
 files = [
@@ -52,4 +52,5 @@ with open('charges.txt', 'a') as output:
     for file in files:
         with open(f"files/{file}", 'r') as f:
             lines = f.readlines()
-            run(lines)
+            for line in run(lines):
+                output.write(f"{line}\n")
