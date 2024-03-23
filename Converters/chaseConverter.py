@@ -14,7 +14,10 @@ def amazon_to_sheets(lines):
     # Process each transaction and print the desired output
     for line in reversed(lines):
         formatted_date, location, price = _chase_to_sheets(line)
-        location = "Amazon"
+        if "PAYMENT" in location:
+            location = "Amazon Payment"
+        else:
+            location = "Amazon"
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.AMAZON_CARD}@{price}"
         # Print the result
@@ -36,6 +39,9 @@ def united_to_sheets(lines):
     # Process each transaction and print the desired output
     for line in reversed(lines):
         formatted_date, location, price = _chase_to_sheets(line)
+        location = location.replace('@', '')
+        if "Payment" in location:
+            location = "United Payment"
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.UNITED_CARD}@{price}"
         # Print the result
@@ -57,6 +63,8 @@ def marriott_to_sheets(lines):
     # Process each transaction and print the desired output
     for line in reversed(lines):
         formatted_date, location, price = _chase_to_sheets(line)
+        if "Payment" in location:
+            location = "Marriott Payment"
         # Format the output string
         output_string = f"{formatted_date}@{location}@{ConfigData.MARRIOTT_CARD}@{price}"
         # Print the result
@@ -91,5 +99,29 @@ def amazon_to_sql(lines):
     sql_lines = []
     for line in sheets_lines:
         date, desc, account, price = line.split('@')
-        sql_lines.append([date, desc, account, price])
+        category = 'Shopping'
+        if "Payment" in desc:
+            category = 'Transfer'
+        sql_lines.append([date, desc, account, price, category])
     return sql_lines
+
+
+def united_to_sql(lines):
+    sheets_lines = united_to_sheets(lines)
+    sql_lines = []
+    for line in sheets_lines:
+        date, desc, account, price = line.split('@')
+        category = 'Shopping'
+        if "Payment" in desc:
+            category = 'Transfer'
+        for restaurant in _category_helper["Restaurants"]:
+            if restaurant in desc:
+                category = 'Restaurant'
+                break
+        sql_lines.append([date, desc, account, price, category])
+    return sql_lines
+
+
+_category_helper = {
+    "Restaurants": ['Popeyes', 'Carls', 'Adalbertos', 'Church\'S Chicken', 'Starbucks', 'Sushi', 'Dragonburger', 'Mcdonald', 'Cafe', 'Wendys', 'Poki', 'Chinese', 'Jack', 'Chipotle']
+}
