@@ -9,3 +9,11 @@
 --# Display Account Totals
 -- SELECT * FROM AccountTotals;
 -- WHERE Account = '';
+
+--# Update Fields
+-- UPDATE [dbo].[Transactions]
+-- SET DateTracked = ActualDate
+-- WHERE Account = 0500;
+
+--# Display Category Totals
+-- SELECT * FROM Categories;
