@@ -122,6 +122,22 @@ def united_to_sql(lines):
     return sql_lines
 
 
+def marriott_to_sql(lines):
+    sheets_lines = marriott_to_sheets(lines)
+    sql_lines = []
+    for line in sheets_lines:
+        date, desc, account, price = line.split('@')
+        category = 'Shopping'
+        if "Payment" in desc:
+            category = 'Transfer'
+        for restaurant in _category_helper["Restaurants"]:
+            if restaurant in desc:
+                category = 'Restaurant'
+                break
+        sql_lines.append([date, desc, account, price, category])
+    return sql_lines
+
+
 _category_helper = {
     "Restaurants": ['Popeyes', 'Carls', 'Adalbertos', 'Church\'S Chicken', 'Starbucks', 'Sushi', 'Dragonburger', 'Mcdonald', 'Cafe', 'Wendys', 'Poki', 'Chinese', 'Jack', 'Chipotle']
 }

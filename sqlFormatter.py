@@ -2,8 +2,7 @@ from config import ConfigData
 from Converters.venmoConverter import venmo_to_sql as venmo
 # from Converters.citiConverter import costco_to_sql as costco
 # from Converters.schwabConverter import schwab_to_sql as schwab_checking
-from Converters.chaseConverter import amazon_to_sql as amazon, united_to_sql as united
-#, marriott_to_sql as marriott
+from Converters.chaseConverter import amazon_to_sql as amazon, united_to_sql as united, marriott_to_sql as marriott
 # from Converters.navyConverter import navy_to_sql as navy_banking
 
 
@@ -25,8 +24,8 @@ def run(lines):
         return amazon(lines[1:])
     elif acc == ConfigData.UNITED_CARD:
         return united(lines[1:])
-    # elif acc == ConfigData.MARRIOTT_CARD:
-    #     return marriott(lines[1:])
+    elif acc == ConfigData.MARRIOTT_CARD:
+        return marriott(lines[1:])
     # elif acc == ConfigData.SCHWAB_CHECKING:
     #     return schwab_checking(lines[1:], acc)
     # elif acc == ConfigData.SCHWAB_RENT:
@@ -42,8 +41,8 @@ files = [
     # "schwab_rent_charges.txt",
     # "costco_charges.txt",
     # "amazon_charges.txt",
-    "united_charges.txt",
-    # "marriott_charges.txt",
+    # "united_charges.txt",
+    "marriott_charges.txt",
     # "venmo_charges.txt",
 ]
 
