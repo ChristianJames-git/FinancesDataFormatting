@@ -1,7 +1,7 @@
 --# Display Sorted
--- SELECT *
--- FROM [dbo].[Transactions]
--- ORDER BY DateTracked;
+SELECT *
+FROM [dbo].[Transactions]
+ORDER BY DateTracked;
 
 --# Display Month of Records
 -- EXEC SelectRecordsByMonth @year = 2024, @month = 1;
@@ -13,7 +13,7 @@
 --# Update Fields
 -- UPDATE [dbo].[Transactions]
 -- SET DateTracked = ActualDate
--- WHERE Account = 0500;
+-- WHERE Account = ;
 
 --# Display Category Totals
 -- SELECT * FROM Categories;
