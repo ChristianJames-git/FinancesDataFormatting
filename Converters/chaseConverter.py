@@ -139,5 +139,5 @@ def marriott_to_sql(lines):
 
 
 _category_helper = {
-    "Restaurants": ['Popeyes', 'Carls', 'Adalbertos', 'Church\'S Chicken', 'Starbucks', 'Sushi', 'Dragonburger', 'Mcdonald', 'Cafe', 'Wendys', 'Poki', 'Chinese', 'Jack', 'Chipotle']
+    "Restaurants": ['Sakana', 'Panda Express', 'Domino', 'Pho', 'Tajima', 'Chick-Fil-A', 'Popeyes', 'Carls', 'Adalbertos', 'Church\'S Chicken', 'Starbucks', 'Sushi', 'Dragonburger', 'Mcdonald', 'Cafe', 'Wendys', 'Poki', 'Chinese', 'Jack', 'Chipotle']
 }
