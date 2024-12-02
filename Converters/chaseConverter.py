@@ -1,5 +1,6 @@
 import re
 from config import ConfigData
+from datetime import datetime
 
 def amazon_to_sheets(lines):
     """
@@ -10,23 +11,19 @@ def amazon_to_sheets(lines):
         03/09/2024@Amazon@1815@-13.55
     """
     sheets_lines = []
-    lines = [lines[i] + lines[i + 1] for i in range(0, len(lines), 2)]
-    # Process each transaction and print the desired output
-    for line in reversed(lines):
-        try:
-            formatted_date, location, price = _chase_to_sheets(line)
-        except Exception as e:
-            print(f"Error: {e}\nOn line: {line}")
-        if "PAYMENT" in location:
-            location = "Amazon Payment"
-        else:
-            location = "Amazon"
-        # Format the output string
-        output_string = f"{formatted_date}@{location}@{ConfigData.AMAZON_CARD}@{price}"
-        # Print the result
-        # output.write(f"{output_string}\n")
+    text = "\n".join(lines)
+    text = text.replace("−", "-")
+    matches = re.findall(r"((?:\d{2}/\d{2}/\d{4})|(?:[A-Za-z]{3} \d{2}, \d{4}))\n(.*?)\n.*?(\-?\$\d+\.\d{2})", text, re.DOTALL)
+    formatted_output = [f"{format_date(date)}@Amazon@{ConfigData.AMAZON_CARD}@{amount}" for date, description, amount in matches]
+
+    for output_string in formatted_output:
         sheets_lines.append(output_string)
     return sheets_lines
+
+def format_date(date):
+    if "/" in date:
+        return date
+    return datetime.strptime(date, "%b %d, %Y").strftime("%m/%d/%Y")
 
 
 def united_to_sheets(lines):

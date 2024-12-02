@@ -50,7 +50,7 @@ with open('charges.txt', 'w') as clear:
     pass
 with open('charges.txt', 'a') as output:
     for file in files:
-        with open(f"files/{file}", 'r') as f:
+        with open(f"files/{file}", 'r', encoding="utf-8", errors='ignore') as f:
             lines = f.readlines()
             for line in run(lines):
                 output.write(f"{line}\n")
