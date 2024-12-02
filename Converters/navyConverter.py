@@ -44,6 +44,8 @@ def navy_to_sql(lines, acc):
         category = 'Shopping'
         if "Payment" in desc:
             category = 'Transfer'
+        if "Income" in desc:
+            category = "Income"
         for restaurant in _category_helper["Restaurants"]:
             if restaurant in desc:
                 category = 'Restaurant'
@@ -53,7 +55,6 @@ def navy_to_sql(lines, acc):
 
 
 files = [
-    
 ]
 
 
@@ -148,6 +149,52 @@ def navy_checking_savings_statement():
             output.write(f"INSERT INTO Transactions (ActualDate, Description, Category, Account, Amount, Tags) VALUES ('{date}', '{desc}', '{category}', '{account}', {amount}, '{tags}');\n")
 
 
+def navy_credit_annual_statement():
+    with open('charges.txt', 'w') as clear:
+        pass
+    with open('charges.txt', 'a') as output:
+        with open(f"files/navy_credit_charges.txt", 'r') as f:
+            lines = f.readlines()
+            pattern = re.compile(r'(\d{2}/\d{2}/\d{2})\s+(.*?)\s+(\d+\.\d{2})')
+            for line in lines:
+                if line == "8818\n":
+                    continue
+                line = line.replace(',', '')
+                line = line.replace('\'', '')
+                match = pattern.match(line.strip())
+                date, desc, amount = match.group(1), match.group(2), match.group(3)
+                if 'CHIPOTLE' in desc:
+                    desc = "Chipotle"
+                if 'JACK' in desc:
+                    desc = "Jack in the Box"
+                if 'POKI' in desc:
+                    desc = "Poki"
+                if 'SHAKE SMART' in desc:
+                    desc = "Shake Smart"
+                if 'PANDA EXPRESS' in desc:
+                    desc = "Panda"
+                if 'EPIC WINGS' in desc:
+                    desc = "Wings"
+                if 'SOMBRERO' in desc:
+                    desc = "Sombreros"
+                if 'ADALBERTOS' in desc:
+                    desc = "Adalbertos"
+                if 'PHO CA DAO' in desc:
+                    desc = "Pho Ca Dao"
+                if 'DOMINO' in desc:
+                    desc = "Dominos"
+                if 'LUCKY' in desc:
+                    desc = "Lucky Chinese"
+                if 'UNDERBELLY' in desc:
+                    desc = "Underbelly"
+                if 'VINNIES' in desc:
+                    desc = "Vinnies"
+                if 'IN N OUT' in desc:
+                    desc = "InNOut"
+                output.write(f"INSERT INTO Transactions (ActualDate, Description, Category, Account, Amount, Tags) VALUES ('{date}', '{desc}', 'Shopping', '{ConfigData.NAVY_CREDIT}', -{amount}, '');\n")
+        
+
+
 def _print_transactions(sheets_lines: list, id, transaction_list, date):
     formatted_date = datetime.strptime(date, "%B %d, %Y").strftime("%m/%d/%Y")
     for i in range(0, len(transaction_list), 2):
@@ -161,12 +208,13 @@ def _print_transactions(sheets_lines: list, id, transaction_list, date):
 _navy_conversions = {
     "Amazon": lambda x: "Amazon Prime",
     "8818": lambda x: x[:-7],
-    "Ausgar": lambda x: "Work Ausgar",
+    "Ausgar": lambda x: "Paycheck",
     "Dividend": lambda x: "Interest Income",
     "DIVIDEND": lambda x: "Interest Income",
     "Interest": lambda x: "Interest Income",
     "Investment Income": lambda x: "Interest Income",
-    "TRF FR CERT-SHR": lambda x: "Transfer"
+    "TRF FR CERT-SHR": lambda x: "Transfer",
+    "Transfer To Credit Car": lambda x: "Transfer To Credit Card"
 }
 
 

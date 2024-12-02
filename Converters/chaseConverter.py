@@ -13,7 +13,10 @@ def amazon_to_sheets(lines):
     lines = [lines[i] + lines[i + 1] for i in range(0, len(lines), 2)]
     # Process each transaction and print the desired output
     for line in reversed(lines):
-        formatted_date, location, price = _chase_to_sheets(line)
+        try:
+            formatted_date, location, price = _chase_to_sheets(line)
+        except Exception as e:
+            print(f"Error: {e}\nOn line: {line}")
         if "PAYMENT" in location:
             location = "Amazon Payment"
         else:
@@ -38,7 +41,10 @@ def united_to_sheets(lines):
     lines = [lines[i] + lines[i + 1] for i in range(0, len(lines), 2)]
     # Process each transaction and print the desired output
     for line in reversed(lines):
-        formatted_date, location, price = _chase_to_sheets(line)
+        try:
+            formatted_date, location, price = _chase_to_sheets(line)
+        except Exception as e:
+            print(f"Error: {e}\nOn line: {line}")
         location = location.replace('@', '')
         if "Payment" in location:
             location = "United Payment"
@@ -62,7 +68,10 @@ def marriott_to_sheets(lines):
     lines = [lines[i] + lines[i + 1] for i in range(0, len(lines), 2)]
     # Process each transaction and print the desired output
     for line in reversed(lines):
-        formatted_date, location, price = _chase_to_sheets(line)
+        try:
+            formatted_date, location, price = _chase_to_sheets(line)
+        except Exception as e:
+            print(f"Error: {e}\nOn line: {line}")
         if "Payment" in location:
             location = "Marriott Payment"
         # Format the output string

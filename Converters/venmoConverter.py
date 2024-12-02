@@ -82,4 +82,14 @@ def venmo_to_sheets(lines):
     return sheets_lines
 
 def venmo_to_sql(lines):
-    print("TODO")
+    sheets_lines = venmo_to_sheets(lines)
+    sql_lines = []
+    for line in sheets_lines:
+        date, desc, account, price = line.split('@')
+        category = 'Shopping'
+        if "Venmo Transfer" in desc:
+            category = "Transfer"
+        if "Rent" in desc or "Water" in desc or "Elec" in desc or "Cox" in desc:
+            category = "Bills"
+        sql_lines.append([date, desc, account, price, category])
+    return sql_lines

@@ -6,23 +6,23 @@ from config import ConfigData
 
 def costco_to_sheets(lines):
     """
-    Input:
-        CHICK-FIL-A #02013 619-562-0774 CA
-        $12.10
-        Feb 21, 2024
+    Input:	
+        8218 GREAT CLIPS AT SANTESANTEE CA	
+        $30.00
+        Mar 30, 2024
         CHRISTIAN JAMES
               
     Output:
-        02/21/2024@CHICK-FIL-A@-$12.10
+        03/30/2024@8218 GREAT CLIPS@-$30.00
     """
 
     sheets_lines = []
-    lines = [lines[i] for i in range(len(lines)) if "Eligible for Citi" not in lines[i]]
-    lines = [lines[i] + lines[i + 1] + lines[i + 2] for i in range(0, len(lines), 5)]
+    lines = [lines[i] for i in range(len(lines)) if ("Eligible for Citi" not in lines[i] and "                " not in lines[i])]
+    lines = [lines[i] + lines[i + 1] + lines[i + 2] for i in range(0, len(lines), 3)]
 
     for line in reversed(lines):
         line = line.strip("\n")
-        location, price, date = line.split("\n")
+        date, location, price = line.split("\n")
         date = date.strip("\t")
         formatted_date = datetime.strptime(date, "%b %d, %Y").strftime("%m/%d/%Y")
 

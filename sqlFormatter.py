@@ -34,16 +34,16 @@ def run(lines):
 
 files = [
     "navy_checking_charges.txt",
-    # "navy_savings_charges.txt",
-    # "navy_credit_charges.txt",
-    # "navy_cd_charges.txt",
-    # "schwab_checking_charges.txt",
-    # "schwab_rent_charges.txt",
-    # "costco_charges.txt",
-    # "amazon_charges.txt",
-    # "united_charges.txt",
-    # "marriott_charges.txt",
-    # "venmo_charges.txt",
+    "navy_savings_charges.txt",
+    "navy_credit_charges.txt",
+    "navy_cd_charges.txt",
+    "schwab_checking_charges.txt",
+    "schwab_rent_charges.txt",
+    "costco_charges.txt",
+    "amazon_charges.txt",
+    "united_charges.txt",
+    "marriott_charges.txt",
+    "venmo_charges.txt",
 ]
 
 with open('charges.txt', 'w') as clear:
