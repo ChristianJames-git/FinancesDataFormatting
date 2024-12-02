@@ -14,7 +14,7 @@ def amazon_to_sheets(lines):
     text = "\n".join(lines)
     text = text.replace("−", "-")
     matches = re.findall(r"((?:\d{2}/\d{2}/\d{4})|(?:[A-Za-z]{3} \d{2}, \d{4}))\n(.*?)\n.*?(\-?\$\d+\.\d{2})", text, re.DOTALL)
-    formatted_output = [f"{format_date(date)}@Amazon@{ConfigData.AMAZON_CARD}@{amount}" for date, description, amount in matches]
+    formatted_output = [f"{format_date(date)}@Amazon@{ConfigData.AMAZON_CARD}@{format_amount(amount)}" for date, description, amount in matches]
 
     for output_string in formatted_output:
         sheets_lines.append(output_string)
@@ -24,6 +24,11 @@ def format_date(date):
     if "/" in date:
         return date
     return datetime.strptime(date, "%b %d, %Y").strftime("%m/%d/%Y")
+
+def format_amount(amount):
+    if "-" in amount:
+        return amount[1:]
+    return f"-{amount}"
 
 
 def united_to_sheets(lines):
