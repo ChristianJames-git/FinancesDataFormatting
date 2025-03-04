@@ -22,7 +22,7 @@ def run(lines):
         return costco(lines[1:])
     elif acc == ConfigData.AMAZON_CARD:
         return amazon(lines[1:])
-    elif acc == ConfigData.UNITED_CARD:
+    elif acc == ConfigData.UNITED_EXPLORER_CARD or acc == ConfigData.UNITED_QUEST_CARD:
         return united(lines[1:])
     elif acc == ConfigData.MARRIOTT_CARD:
         return marriott(lines[1:])

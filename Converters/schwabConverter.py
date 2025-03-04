@@ -20,14 +20,14 @@ def schwab_to_sheets(lines, acc):
     return sheets_lines
 
 
-def schwab_to_sql(lines, acc):
-    sheets_lines = schwab_to_sheets(lines, acc)
-    sql_lines = []
-    for line in sheets_lines:
-        date, desc, account, price = line.split('@')
-        category = 'Shopping'
-        sql_lines.append([date, desc, account, price, category])
-    return sql_lines
+# def schwab_to_sql(lines, acc):
+#     sheets_lines = schwab_to_sheets(lines, acc)
+#     sql_lines = []
+#     for line in sheets_lines:
+#         date, desc, account, price = line.split('@')
+#         category = 'Shopping'
+#         sql_lines.append([date, desc, account, price, category])
+#     return sql_lines
 
 
 _schwab_conversions = {

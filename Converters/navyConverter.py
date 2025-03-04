@@ -36,22 +36,22 @@ def navy_to_sheets(lines, acc):
     return sheets_lines
 
 
-def navy_to_sql(lines, acc):
-    sheets_lines = navy_to_sheets(lines, acc)
-    sql_lines = []
-    for line in sheets_lines:
-        date, desc, account, price = line.split('@')
-        category = 'Shopping'
-        if "Payment" in desc:
-            category = 'Transfer'
-        if "Income" in desc:
-            category = "Income"
-        for restaurant in _category_helper["Restaurants"]:
-            if restaurant in desc:
-                category = 'Restaurant'
-                break
-        sql_lines.append([date, desc, account, price, category])
-    return sql_lines
+# def navy_to_sql(lines, acc):
+#     sheets_lines = navy_to_sheets(lines, acc)
+#     sql_lines = []
+#     for line in sheets_lines:
+#         date, desc, account, price = line.split('@')
+#         category = 'Shopping'
+#         if "Payment" in desc:
+#             category = 'Transfer'
+#         if "Income" in desc:
+#             category = "Income"
+#         for restaurant in _category_helper["Restaurants"]:
+#             if restaurant in desc:
+#                 category = 'Restaurant'
+#                 break
+#         sql_lines.append([date, desc, account, price, category])
+#     return sql_lines
 
 
 files = [
