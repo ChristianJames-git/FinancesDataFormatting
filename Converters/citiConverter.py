@@ -38,24 +38,3 @@ def costco_to_sheets(lines):
         # output.write(f"{output_string}\n")
         sheets_lines.append(output_string)
     return sheets_lines
-
-# def costco_to_sql(lines):
-#     sheets_lines = costco_to_sheets(lines)
-#     sql_lines = []
-#     for line in sheets_lines:
-#         date, desc, account, price = line.split('@')
-#         category = 'Shopping'
-#         if "Autopay" in desc:
-#             category = 'Transfer'
-#             desc = "Costco Payment"
-#         for restaurant in _category_helper["Restaurants"]:
-#             if restaurant in desc:
-#                 category = 'Restaurant'
-#                 break
-#         sql_lines.append([date, desc, account, price, category])
-#     return sql_lines
-
-
-# _category_helper = {
-#     "Restaurants": ['Sakana', 'Panda Express', 'Domino', 'Pho', 'Tajima', 'Chick-Fil-A', 'Popeyes', 'Carls', 'Adalbertos', 'Church\'S Chicken', 'Starbucks', 'Sushi', 'Dragonburger', 'Mcdonald', 'Cafe', 'Wendys', 'Poki', 'Chinese', 'Jack', 'Chipotle']
-# }

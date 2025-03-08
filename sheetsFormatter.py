@@ -2,30 +2,20 @@ from config import ConfigData
 from Converters.venmoConverter import venmo_to_sheets as venmo
 from Converters.citiConverter import costco_to_sheets as costco
 from Converters.schwabConverter import schwab_to_sheets as schwab_checking
-from Converters.chaseConverter import amazon_to_sheets as amazon, united_to_sheets as united, marriott_to_sheets as marriott
 from Converters.navyConverter import navy_to_sheets as navy_banking
+from Converters.chaseConverter import chase_to_sheets as chase
 
 
 def run(lines):
     acc = lines[0][0:4]
     if acc == "venm":
         return venmo(lines[1:])
-    elif acc == ConfigData.NAVY_CHECKING:
-        return navy_banking(lines[1:], acc)
-    elif acc == ConfigData.NAVY_SAVINGS:
-        return navy_banking(lines[1:], acc)
-    elif acc == ConfigData.NAVY_CREDIT:
-        return navy_banking(lines[1:], acc)
-    elif acc == ConfigData.NAVY_CD:
+    elif acc in [ConfigData.NAVY_CHECKING, ConfigData.NAVY_SAVINGS, ConfigData.NAVY_CREDIT, ConfigData.NAVY_CD]:
         return navy_banking(lines[1:], acc)
     elif acc == ConfigData.COSTCO_CARD:
         return costco(lines[1:])
-    elif acc == ConfigData.AMAZON_CARD:
-        return amazon(lines[1:])
-    elif acc == ConfigData.UNITED_EXPLORER_CARD or acc == ConfigData.UNITED_QUEST_CARD:
-        return united(lines[1:])
-    elif acc == ConfigData.MARRIOTT_CARD:
-        return marriott(lines[1:])
+    elif acc in [ConfigData.AMAZON_CARD, ConfigData.UNITED_EXPLORER_CARD, ConfigData.UNITED_QUEST_CARD, ConfigData.MARRIOTT_CARD]:
+        return chase(lines[1:], acc)
     elif acc == ConfigData.SCHWAB_CHECKING:
         return schwab_checking(lines[1:], acc)
     elif acc == ConfigData.SCHWAB_RENT:
