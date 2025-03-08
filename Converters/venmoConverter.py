@@ -2,59 +2,20 @@ from datetime import datetime, timedelta
 import re
 
 def venmo_to_sheets(lines):
-    """
-    Input:
-        You paid Eugenio Casta
-        1d
-        Heater
-        - $10.00
-    Output:
-        03/13/2024@Eugenio Casta Heater@-$10.00
-    """
     sheets_lines = []
-    combined_lines = []
-    transaction = 0
-    newTransaction = True
-    for line in lines:
-        if newTransaction:
-            combined_lines.append("")
-            newTransaction = False
-        combined_lines[transaction] += line
-        if "$" in line:
-            newTransaction = True
-            transaction += 1
+    text = "".join(lines)
+    combined_lines = re.findall(r"([\s\S]*?\$?\d{1,3}(?:,\d{3})*\.\d{2})\n?", text)
 
     for line in reversed(combined_lines):
-        line = re.sub(r'\n$', '', line)
         line = line.split("\n")
         if "Standard Transfer Initiated" not in line[0]:
             desc, date_change, desc2, amount = line
-            you_paid_pattern = re.compile(r'You paid (.+)')
-            paid_you_pattern = re.compile(r'(.+) paid you')
-            you_charged_pattern = re.compile(r'You charged (.+)')
-            charged_you_pattern = re.compile(r'(.+) charged you')
-
-            # Try to find matches for both patterns
-            you_paid_match = you_paid_pattern.search(desc)
-            paid_you_match = paid_you_pattern.search(desc)
-            you_charged_match = you_charged_pattern.search(desc)
-            charged_you_match = charged_you_pattern.search(desc)
-
-            if you_paid_match:
-                description = you_paid_match.group(1)
-                desc = you_paid_pattern.sub(description, desc)
-            elif paid_you_match:
-                description = paid_you_match.group(1)
-                desc = paid_you_pattern.sub(description, desc)
-            elif you_charged_match:
-                description = you_charged_match.group(1)
-                desc = you_charged_pattern.sub(description, desc)
-            elif charged_you_match:
-                description = charged_you_match.group(1)
-                desc = charged_you_pattern.sub(description, desc)
+            match = re.search(r"(?:You (?:paid|charged) (.+)|(.+) (?:charged|paid) you)", desc)
+            desc = match.group(1) or match.group(2) if match else desc
             desc = f"{desc.strip()} {desc2}"
         else:
-            ignore, date_change, ignore2, ignore3, amount = line
+            _, date_change, _, _, amount = line
+            amount = "-" + amount
             desc = "Venmo Transfer"
 
         date_change = re.sub(r'\d+[smh]', "0d", date_change)
@@ -69,27 +30,7 @@ def venmo_to_sheets(lines):
             parsed_date = datetime.strptime(date_change, "%b %d, %Y")
             formatted_date = parsed_date.strftime("%m/%d/%Y")
 
-        amount = re.sub(' ', '', amount)
-        amount = re.sub('\+', '', amount)
+        output_string = f"{formatted_date}@{desc}@{"venmo"}@{re.sub(r"[+ ]", "", amount)}"
 
-        card = "venmo"
-
-        output_string = f"{formatted_date}@{desc}@{card}@{amount}"
-
-        # Print the result
-        # output.write(f"{output_string}\n")
         sheets_lines.append(output_string)
     return sheets_lines
-
-# def venmo_to_sql(lines):
-#     sheets_lines = venmo_to_sheets(lines)
-#     sql_lines = []
-#     for line in sheets_lines:
-#         date, desc, account, price = line.split('@')
-#         category = 'Shopping'
-#         if "Venmo Transfer" in desc:
-#             category = "Transfer"
-#         if "Rent" in desc or "Water" in desc or "Elec" in desc or "Cox" in desc:
-#             category = "Bills"
-#         sql_lines.append([date, desc, account, price, category])
-#     return sql_lines
