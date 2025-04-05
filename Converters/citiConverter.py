@@ -6,9 +6,9 @@ def citi_to_sheets(lines, acc):
     text = "\n".join(lines)
     text = text.replace("−", "-")
     
-    matches = re.findall(r"([A-Za-z0-9]+(?: [^\n\d\#]+)*)[\s\S]*?(-?\$?\d{1,3}(?:,\d{3})*\.\d{2})\s*?([A-Za-z]{3} \d{2}, \d{4})\s*?CHRISTIAN JAMES", text)
+    matches = re.findall(r"([A-Za-z]{3} \d{2}, \d{4})\s*?([A-Za-z0-9]+(?: [^\n\d\#]+)*)[\s\S]*?(-?\$?\d{1,3}(?:,\d{3})*\.\d{2})\s*?", text)
 
-    formatted_output = [f"{format_date(date)}@{description.strip()}@{acc}@{format_amount(amount)}" for description, amount, date in matches]
+    formatted_output = [f"{format_date(date)}@{description.strip()}@{acc}@{format_amount(amount)}" for date, description, amount in matches]
     formatted_output.sort()
 
     for output_string in formatted_output:
